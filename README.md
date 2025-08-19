@@ -1,26 +1,5 @@
-# consent-logs
+# Consent logging
+This is an experimental project focused on building and testing a consent logging application. It explores different approaches for capturing, storing, and analyzing user consent events using modern technologies.
 
-A minimal Consent API in Go that receives consent events, validates them, and emits structured logs.
-
-## To run code
-```
-go run main.go
-```
-
-## Example request
-```
-curl -X POST http://localhost:8080/consent \
-  -H "Content-Type: application/json" \
-  -d '{
-    "userId": "abc123",
-    "deviceId": "xyz789",
-    "policyVersion": "v1.2",
-    "categories": {
-      "necessary": true,
-      "analytics": false,
-      "marketing": true
-    },
-    "region": "EU"
-  }'
-```
-Then you will see the consent log from stdout:tada:.
+- [consent-api](./consent-api/): simple golang app to receive consent request
+- [otel-clickhouse](./otel-clickhouse/): otel server to receive consent request and collect with Clickhouse

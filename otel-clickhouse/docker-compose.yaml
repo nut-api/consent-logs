@@ -1,0 +1,36 @@
+services:
+  # consent-api:
+  #   build: ./consent-api
+  #   container_name: consent-api
+  #   ports:
+  #     - "8080:8080"
+  #   environment:
+  #     - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+  #   depends_on:
+  #     - otel-collector
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.106.0
+    container_name: otel-collector
+    command: ["--config=/etc/otel/config.yaml"]
+    volumes:
+      - ./otel-config.yaml:/etc/otel/config.yaml:ro
+    ports:
+      - 4318:4318  # OTLP HTTP
+    depends_on:
+      - clickhouse
+  clickhouse:
+    image: clickhouse/clickhouse-server
+    container_name: clickhouse
+    environment:
+      - CLICKHOUSE_USER=user
+      - CLICKHOUSE_PASSWORD=pass
+    ports:
+      - "8123:8123"   # HTTP API
+      - "9000:9000"   # Native protocol
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
