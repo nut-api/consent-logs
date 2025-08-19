@@ -23,4 +23,4 @@ curl -X POST http://localhost:8080/consent \
     "region": "EU"
   }'
 ```
-Then you will see the consent log from stdout:tada:.
+Then you will see the consent log from stdout :tada: .
