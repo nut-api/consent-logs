@@ -34,10 +34,12 @@ curl -X POST http://localhost:4318/v1/logs \
             ]
           }
         ] 
-
-# Can see the logs on consent_logs tables
+```
+Can see the logs on consent_logs tables
+```
 ./clickhouse -u user
 ## enter pass
 
 select * from consent_logs
 ```
+Then you will see the consent log from stdout :tada: .
