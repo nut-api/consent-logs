@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Consent Demo</title>
+</head>
+<body>
+  <h2>Consent Demo</h2>
+  <button onclick="sendConsent('accept')">Accept</button>
+  <button onclick="sendConsent('reject')">Reject</button>
+  <script>
+    async function sendConsent(action) {
+      const payload = {
+        resourceLogs: [
+          {
+            resource: {
+              attributes: [{ key: "service.name", value: { stringValue: "consent-frontend" }}]
+            },
+            scopeLogs: [
+              {
+                logRecords: [
+                  {
+                    timeUnixNano: Date.now() * 1e6,
+                    severityNumber: 9,
+                    severityText: "INFO",
+                    body: { stringValue: `User ${action}ed consent` },
+                    attributes: [
+                      { key: "user_id", value: { stringValue: "user123" }},
+                      { key: "policy_version", value: { stringValue: "v1.2" }},
+                      { key: "action", value: { stringValue: action }},
+                      { key: "region", value: { stringValue: "EU" }},
+                      { key: "purposes", value: { arrayValue: { values: [{ stringValue: "analytics" }, { stringValue: "ads" }] }}}
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      };
+
+      await fetch("http://localhost:4318/v1/logs", {
+        method: "POST",
+        headers: { 
+          "Content-Type": "application/json",
+          "X-Forwarded-Host": "203.0.113.42"   // ✅ simulate real client IP
+        },
+        body: JSON.stringify(payload)
+      });
+
+      alert("Consent " + action + " sent!");
+    }
+  </script>
+</body>
+</html>

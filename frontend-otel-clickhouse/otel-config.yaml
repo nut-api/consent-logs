@@ -1,0 +1,40 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+      http:
+        endpoint: 0.0.0.0:4318
+        cors:
+          allowed_origins:
+          - "*"
+          allowed_headers:
+          - "*"
+        include_metadata: true
+
+processors:
+  batch:
+  attributes/add_forwarded_ip:
+    actions:
+    - key: ip_address
+      action: upsert
+      # value: 12345
+      from_context: X-Forwarded-Host # ✅ get from header
+
+exporters:
+  debug:
+    verbosity: detailed
+  clickhouse:
+    endpoint: tcp://clickhouse:9000
+    username: user
+    password: pass
+    database: default
+    logs_table_name: otel_logs
+    create_schema: false
+    timeout: 10s
+
+service:
+  pipelines:
+    logs:
+      receivers: [ otlp ]
+      processors: [ attributes/add_forwarded_ip, batch ]
+      exporters: [ debug, clickhouse ]
