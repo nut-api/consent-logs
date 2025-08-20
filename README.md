@@ -3,3 +3,4 @@ This is an experimental project focused on building and testing a consent loggin
 
 - [consent-api](./consent-api/): simple golang app to receive consent request
 - [otel-clickhouse](./otel-clickhouse/): otel server to receive consent request and collect with Clickhouse
+- [frontend-otel-clickhouse](./frontend-otel-clickhouse/): using frontend app to sent user consent

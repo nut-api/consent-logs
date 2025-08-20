@@ -37,7 +37,8 @@ curl -X POST http://localhost:4318/v1/logs \
 ```
 Can see the logs on consent_logs tables
 ```
-./clickhouse -u user
+docker exec -it clickhouse bash
+clickhouse -u user
 ## enter pass
 
 select * from consent_logs
