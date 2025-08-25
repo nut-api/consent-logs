@@ -1,0 +1,26 @@
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: clickhouse
+spec:
+  hosts:
+  - "clickhouse.dicast.test"
+  gateways:
+  - istio-system/gateway
+  http:
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        host: clickhouse.default.svc.cluster.local
+        port:
+          number: 8123
+  tcp:
+  - match:
+    - port: 9000
+    route:
+    - destination:
+        host: clickhouse.default.svc.cluster.local
+        port:
+          number: 9000
